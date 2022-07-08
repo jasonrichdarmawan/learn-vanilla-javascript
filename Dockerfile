@@ -1,5 +1,5 @@
 FROM nginx:stable-alpine
 WORKDIR /usr/share/nginx/html
 RUN rm -rf ./*
-COPY ./src/* ./
+COPY ./src ./
 ENTRYPOINT [ "nginx", "-g", "daemon off;" ]
