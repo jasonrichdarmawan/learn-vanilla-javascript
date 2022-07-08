@@ -16,7 +16,7 @@ document.querySelectorAll("[data-go-to-id]").forEach(function (link) {
   });
 });
 
-function onLoad() {
+(function () {
   const hash = window.location.hash.slice(1);
   const routerView = document.getElementById("router-view");
 
@@ -28,31 +28,28 @@ function onLoad() {
         routerView.innerHTML = "<h1>404 - Page Not Found </h1>";
       }
     }
-    request(onload, 'get', `/${hash}.html`)
+    
+    request(onload, 'get', `/pages/${hash}.html`)
   }
-}
-
-window.addEventListener("load", onLoad);
+})()
 
 function onRouteChanged() {
-  const hash = window.location.hash;
+  const hash = window.location.hash.slice(1);
   const routerView = document.getElementById("router-view");
 
   if (!(routerView instanceof HTMLElement)) {
     throw new ReferenceError("No router view element available for rendering");
   }
 
-  switch (hash) {
-    case "#home":
-      routerView.innerHTML = "<h1>Home page</h1>";
-      break;
-    case "#about":
-      request(function () { routerView.innerHTML = this.responseText }, 'get', '/about.html')
-      break;
-    default:
-      routerView.innerHTML = "<h1>404 - Page Not Found</h1>";
-      break;
+  function onload() {
+    if (this.status >= 200 && this.status < 400) {
+      routerView.innerHTML = this.responseText;
+    } else {
+      routerView.innerHTML = "<h1>404 - Page Not Found </h1>";
+    }
   }
+
+  request(onload, 'get', `/pages/${hash}.html`)
 }
 
 window.addEventListener("hashchange", onRouteChanged);
