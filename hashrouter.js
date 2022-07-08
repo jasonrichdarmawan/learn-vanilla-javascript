@@ -1,4 +1,4 @@
-"use strict";
+import request from "./request.js"
 
 document.querySelectorAll("[data-go-to-id]").forEach(function (link) {
   link.addEventListener("click", function () {
@@ -15,13 +15,6 @@ document.querySelectorAll("[data-go-to-id]").forEach(function (link) {
     });
   });
 });
-
-function request(onload, method, url) {
-  var request = new XMLHttpRequest();
-  request.onload = onload;
-  request.open(method, url, true);
-  request.send();
-}
 
 function onLoad() {
   const hash = window.location.hash.slice(1);
